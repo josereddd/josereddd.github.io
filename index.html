@@ -1,57 +1,175 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio de José Rojas - Economista</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard Banca Mexicana – Portafolio de José</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+    </style>
 </head>
-<body>
-    
-    <header>
-        <h1>¡Hola! Soy José Rojas</h1>
-        <p>Economista | Bienvenido a mi portafolio profesional.</p>
+
+<body class="bg-gray-100">
+
+    <!-- HEADER -->
+    <header class="bg-blue-900 text-white py-10 shadow-lg">
+        <h1 class="text-4xl font-bold text-center">
+            Sistema Bancario Mexicano – Visual Storytelling
+        </h1>
+        <p class="text-center text-gray-200 mt-2 text-lg">
+            Portafolio de visualización y análisis financiero – José
+        </p>
     </header>
 
-    <main>
-        <section id="sobre-mi">
-            <h2>Sobre Mí</h2>
-            <p>
-                Soy un economista apasionado por el análisis financiero y la gestión de riesgos. Mi enfoque principal es utilizar modelos cuantitativos y análisis de datos para comprender y mitigar los riesgos en el sector financiero.
-            </p>
-            <p>
-                Estoy enfocado en la intersección entre la economía, las finanzas y la tecnología, con un interés particular en cómo la ciencia de datos puede transformar la evaluación del riesgo crediticio.
+    <main class="max-w-5xl mx-auto mt-10 space-y-10">
+
+        <!-- Introducción -->
+        <section class="card">
+            <h2 class="text-2xl font-bold mb-3">📌 Introducción</h2>
+            <p class="text-gray-700 leading-relaxed">
+                México cuenta con más de <strong>50 instituciones bancarias</strong>, pero 
+                <strong>7 bancos</strong> dominan el 78% del mercado.  
+                Este dashboard resume la estructura del sistema y su evolución.
             </p>
         </section>
 
-        <section id="proyectos">
-            <h2>Mis Proyectos</h2>
-            
-            <article>
-                <h3>Proyecto 1: Análisis de Riesgo Crediticio</h3>
-                <p>
-                    Este proyecto se centra en el <strong>riesgo crediticio</strong> (también llamado <strong>riesgo de crédito</strong>), uno de los tipos de riesgo financiero más importantes, especialmente en bancos y entidades financieras.
-                </p>
-                
-                <h4>Definición</h4>
-                <blockquote>
-                    <p>
-                        El <strong>riesgo crediticio</strong> es la posibilidad de que un prestatario (persona, empresa o gobierno) no cumpla con sus obligaciones de pago, es decir, que no pague total o parcialmente el capital y/o los intereses en el tiempo acordado.
-                    </p>
-                </blockquote>
-
-                <a href="#">Ver análisis (Próximamente)</a>
-            </article>
-            </section>
-
-        <section id="contacto">
-            <h2>Contacto</h2>
-            <p>Puedes encontrarme en:</p>
-            <ul>
-                <li><a href="httpsA://www.linkedin.com/in/TU_USUARIO_LINKEDIN">LinkedIn</a></li>
-                <li><a href="https://github.com/TU_USUARIO_GITHUB">GitHub</a></li>
-            </ul>
+        <!-- Gráfica 1 -->
+        <section class="card">
+            <h2 class="text-xl font-bold mb-4">1️⃣ Ranking de los bancos más grandes (por activos)</h2>
+            <canvas id="topBanksChart" height="120"></canvas>
         </section>
+
+        <!-- Gráfica 2 -->
+        <section class="card">
+            <h2 class="text-xl font-bold mb-4">2️⃣ Evolución del crédito total en México (2018–2024)</h2>
+            <canvas id="trendChart" height="120"></canvas>
+        </section>
+
+        <!-- Gráfica 3 -->
+        <section class="card">
+            <h2 class="text-xl font-bold mb-4">3️⃣ Participación de mercado (2024)</h2>
+            <canvas id="marketPieChart" height="120"></canvas>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-10 text-gray-600">
+            © 2025 – Portafolio de José | Visualización Financiera
+        </footer>
+
     </main>
+
+    <script>
+        // ============================================
+        // 1. Barra horizontal – Activos por banco
+        // ============================================
+        new Chart(document.getElementById("topBanksChart"), {
+            type: "bar",
+            data: {
+                labels: [
+                    "BBVA", "Santander", "Banorte", 
+                    "Citibanamex", "HSBC", "Scotiabank", "Inbursa"
+                ],
+                datasets: [{
+                    label: "Activos (miles de millones de pesos)",
+                    data: [3200, 1700, 1600, 1400, 900, 700, 600],
+                    backgroundColor: "#1d4ed8"
+                }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Activos Totales por Banco – 2024",
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+
+        // ============================================
+        // 2. Línea – Evolución del crédito total
+        // ============================================
+        new Chart(document.getElementById("trendChart"), {
+            type: "line",
+            data: {
+                labels: ["2018", "2019", "2020", "2021", "2022", "2023", "2024"],
+                datasets: [{
+                    label: "Crédito total (billones de pesos)",
+                    data: [5.1, 5.3, 5.0, 5.4, 5.8, 6.3, 6.9],
+                    borderWidth: 3,
+                    tension: 0.3,
+                    fill: false,
+                    borderColor: "#2563eb",
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Crecimiento del Crédito Bancario",
+                        font: { size: 16 }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+
+        // ============================================
+        // 3. Pie – Participación de mercado
+        // ============================================
+        new Chart(document.getElementById("marketPieChart"), {
+            type: "pie",
+            data: {
+                labels: [
+                    "BBVA (36%)", "Santander (14%)", "Banorte (13%)",
+                    "Citibanamex (9%)", "HSBC (5%)", "Otros (23%)"
+                ],
+                datasets: [{
+                    data: [36, 14, 13, 9, 5, 23],
+                    backgroundColor: [
+                        "#1d4ed8",
+                        "#3b82f6",
+                        "#60a5fa",
+                        "#93c5fd",
+                        "#bfdbfe",
+                        "#d1d5db"
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Participación del Mercado Bancario – 2024",
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>
