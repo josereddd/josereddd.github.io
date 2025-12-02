@@ -1,175 +1,521 @@
+<!-- 
+NARRATIVE PLAN:
+1.  **Title & Hook**: "The Engine of Profit." Introduce the massive scale of the Mexican banking sector.
+2.  **The Income Pie (Composition)**: A breakdown of *how* money flows in. Goal: Compare/Composition. Viz: Doughnut Chart. Shows that Interest > Commissions.
+3.  **The Interest Driver (Trend)**: Correlate the Banxico Reference Rate with Bank Interest Income. Goal: Change/Correlation. Viz: Line/Area Chart. Explains *why* income is high right now.
+4.  **Commission Breakdown (Detail)**: Drill down into the second largest bucket. Goal: Rank. Viz: Horizontal Bar Chart. Shows fees from cards/transfers dominate.
+5.  **The Business Model (Process)**: A flowchart explaining "Captación" vs. "Colocación". Goal: Educational/Process. Viz: HTML/CSS Diagram (No SVG).
+6.  **Efficiency Leaders (Market)**: Comparing the top banks (BBVA, Banorte, etc.) by revenue. Goal: Compare/Relationship. Viz: Bubble/Scatter Chart.
+
+CHART SELECTION JUSTIFICATION (NO SVG):
+1.  **Income Source Breakdown**: Doughnut Chart (Chart.js). Best for showing parts of a whole where the total is 100%.
+2.  **Interest vs. Rates**: Dual-Axis Line Chart (Chart.js). Shows the tight correlation between central bank policies and bank revenue over time.
+3.  **Commission Sources**: Horizontal Bar Chart (Chart.js). Best for readable labels (e.g., "Account Management") and ranking values.
+4.  **Bank Comparison**: Bubble Chart (Chart.js). Allows three dimensions: Assets (X), Revenue (Y), and Net Income (Bubble Size).
+5.  **Flowchart**: Styled HTML/CSS Flexbox. Best for process mapping without using SVG/Mermaid.
+
+CONFIRMATION:
+- NO SVG used.
+- NO Mermaid JS used.
+- Palette: "Energetic & Playful" (Deep Purple, Cyan, Hot Pink, Gold).
+-->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Dashboard Banca Mexicana – Portafolio de José</title>
-
-    <!-- Tailwind -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radiografía de la Banca Mexicana: Fuentes de Ingresos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
         }
-        .card {
+
+        /* Chart Container Logic - Mandatory for sizing */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width to prevent stretching */
+            height: 350px;    /* Default Height */
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Custom Palette based on "Energetic & Playful" */
+        .text-accent-purple { color: #6C63FF; }
+        .bg-accent-purple { background-color: #6C63FF; }
+        .border-accent-purple { border-color: #6C63FF; }
+
+        .text-accent-teal { color: #00D2D3; }
+        .bg-accent-teal { background-color: #00D2D3; }
+        
+        .text-accent-pink { color: #FF6B6B; }
+        .bg-accent-pink { background-color: #FF6B6B; }
+
+        /* Flowchart CSS styling */
+        .flow-box {
             background: white;
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #6C63FF;
+            text-align: center;
+            font-weight: 600;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #9CA3AF;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
-
 <body class="bg-gray-100">
 
-    <!-- HEADER -->
-    <header class="bg-blue-900 text-white py-10 shadow-lg">
-        <h1 class="text-4xl font-bold text-center">
-            Sistema Bancario Mexicano – Visual Storytelling
-        </h1>
-        <p class="text-center text-gray-200 mt-2 text-lg">
-            Portafolio de visualización y análisis financiero – José
-        </p>
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-[#6C63FF] to-[#00D2D3] text-white p-8 shadow-lg">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                El Negocio de la Banca en México
+            </h1>
+            <p class="text-xl md:text-2xl font-light opacity-90 max-w-3xl">
+                ¿De dónde obtienen realmente sus ganancias los bancos comerciales? Un análisis visual del Margen Financiero, Comisiones y la Intermediación.
+            </p>
+        </div>
     </header>
 
-    <main class="max-w-5xl mx-auto mt-10 space-y-10">
+    <main class="max-w-7xl mx-auto p-4 md:p-8 space-y-12">
 
-        <!-- Introducción -->
-        <section class="card">
-            <h2 class="text-2xl font-bold mb-3">📌 Introducción</h2>
-            <p class="text-gray-700 leading-relaxed">
-                México cuenta con más de <strong>50 instituciones bancarias</strong>, pero 
-                <strong>7 bancos</strong> dominan el 78% del mercado.  
-                Este dashboard resume la estructura del sistema y su evolución.
+        <!-- Introduction -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 border-t-4 border-[#FF6B6B]">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Panorama General</h2>
+            <p class="text-gray-600 text-lg leading-relaxed">
+                La banca múltiple en México opera bajo un entorno de altas tasas de interés, lo que históricamente ha beneficiado su principal fuente de ingresos: el cobro de intereses por préstamos. Sin embargo, la digitalización está transformando cómo se generan las comisiones. A continuación, desglosamos cada peso que entra a la banca.
             </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-500 text-sm uppercase tracking-wide">Ingresos Totales (Est. 2024)</p>
+                    <p class="text-4xl font-extrabold text-[#6C63FF] mt-2">+1.3 Billones MXN</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-500 text-sm uppercase tracking-wide">Tasa de Referencia (Promedio)</p>
+                    <p class="text-4xl font-extrabold text-[#00D2D3] mt-2">10.50%</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-500 text-sm uppercase tracking-wide">Dependencia de Intereses</p>
+                    <p class="text-4xl font-extrabold text-[#FF6B6B] mt-2">~68%</p>
+                </div>
+            </div>
         </section>
 
-        <!-- Gráfica 1 -->
-        <section class="card">
-            <h2 class="text-xl font-bold mb-4">1️⃣ Ranking de los bancos más grandes (por activos)</h2>
-            <canvas id="topBanksChart" height="120"></canvas>
+        <!-- Section 1: Income Composition (Doughnut) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 border-l-4 border-[#6C63FF] pl-4">
+                    La Composición de los Ingresos
+                </h3>
+                <p class="text-gray-600 mb-4">
+                    Al contrario de la creencia popular de que los bancos viven de las "comisiones ocultas", la realidad de los datos de la CNBV muestra que la columna vertebral es el <strong>Margen Financiero</strong>.
+                </p>
+                <ul class="space-y-3 mt-6">
+                    <li class="flex items-start">
+                        <span class="inline-block w-4 h-4 rounded-full bg-[#6C63FF] mt-1 mr-3"></span>
+                        <span class="text-gray-700"><strong>Margen Financiero (68%):</strong> La diferencia entre lo que cobran por préstamos y lo que pagan a los ahorradores.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-block w-4 h-4 rounded-full bg-[#00D2D3] mt-1 mr-3"></span>
+                        <span class="text-gray-700"><strong>Comisiones y Tarifas (19%):</strong> Cobros por servicios, manejo de cuenta, tarjetas y transferencias.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-block w-4 h-4 rounded-full bg-[#FF9F43] mt-1 mr-3"></span>
+                        <span class="text-gray-700"><strong>Intermediación (13%):</strong> Ganancias por compra/venta de divisas, bonos y derivados.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                <div class="chart-container">
+                    <canvas id="incomeMixChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-400 mt-4 text-center">Fuente: Datos agregados sectoriales estimados (CNBV/Banxico).</p>
+            </div>
         </section>
 
-        <!-- Gráfica 2 -->
-        <section class="card">
-            <h2 class="text-xl font-bold mb-4">2️⃣ Evolución del crédito total en México (2018–2024)</h2>
-            <canvas id="trendChart" height="120"></canvas>
+        <!-- Section 2: Interest Rates vs Income (Line Chart) -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">El Impacto de la Tasa Banxico</h3>
+            <p class="text-gray-600 mb-8 max-w-4xl">
+                Existe una correlación directa entre la tasa de referencia establecida por el Banco de México y los ingresos por intereses de la banca comercial. Cuando la tasa sube para controlar la inflación, el margen financiero de los bancos tiende a expandirse, generando utilidades récord como las observadas en 2023 y 2024.
+            </p>
+            
+            <div class="chart-container" style="max-width: 100%; height: 400px;">
+                <canvas id="trendChart"></canvas>
+            </div>
         </section>
 
-        <!-- Gráfica 3 -->
-        <section class="card">
-            <h2 class="text-xl font-bold mb-4">3️⃣ Participación de mercado (2024)</h2>
-            <canvas id="marketPieChart" height="120"></canvas>
+        <!-- Section 3: Process Diagram (HTML/CSS) -->
+        <section class="bg-gray-50 rounded-xl p-8 border border-gray-200">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">¿Cómo funciona el Margen Financiero?</h3>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+                El negocio bancario simplificado: Captar dinero barato y prestarlo caro.
+            </p>
+            
+            <!-- Custom CSS Grid/Flex Diagram -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center justify-center max-w-5xl mx-auto">
+                <!-- Step 1 -->
+                <div class="flow-box md:col-span-1">
+                    <div class="text-4xl mb-2">👥</div>
+                    <div class="text-sm text-gray-500">Paso 1</div>
+                    <div class="text-gray-800 font-bold">Ahorradores</div>
+                    <div class="text-xs text-green-600 mt-2">Depositan Dinero</div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flow-arrow md:col-span-1 rotate-90 md:rotate-0">➜</div>
+
+                <!-- Step 2 (The Bank) -->
+                <div class="flow-box md:col-span-1 bg-white border-l-4 border-[#00D2D3] scale-110 shadow-xl z-10">
+                    <div class="text-4xl mb-2">🏦</div>
+                    <div class="text-sm text-gray-500">El Banco</div>
+                    <div class="text-xs text-gray-400 mb-1">Paga Tasa Pasiva (baja)</div>
+                    <div class="border-t border-gray-200 my-2"></div>
+                    <div class="text-xs text-[#6C63FF] font-bold">Cobra Tasa Activa (alta)</div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flow-arrow md:col-span-1 rotate-90 md:rotate-0">➜</div>
+
+                <!-- Step 3 -->
+                <div class="flow-box md:col-span-1">
+                    <div class="text-4xl mb-2">🏭</div>
+                    <div class="text-sm text-gray-500">Paso 3</div>
+                    <div class="text-gray-800 font-bold">Créditos</div>
+                    <div class="text-xs text-red-500 mt-2">Empresas y Personas</div>
+                </div>
+            </div>
+            <div class="mt-8 text-center bg-[#6C63FF] text-white p-4 rounded-lg max-w-md mx-auto">
+                <p class="font-bold">Resultado = Margen Financiero</p>
+                <p class="text-sm opacity-90">(Intereses Cobrados - Intereses Pagados)</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Commissions Details (Horizontal Bar) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="order-2 md:order-1 bg-white p-6 rounded-xl shadow-lg">
+                <div class="chart-container">
+                    <canvas id="commissionsChart"></canvas>
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 border-l-4 border-[#00D2D3] pl-4">
+                    Desglose de Comisiones
+                </h3>
+                <p class="text-gray-600 mb-4">
+                    No todas las comisiones son iguales. Mientras que las comisiones por uso de cajeros ajenos han disminuido, los ingresos por medios de pago electrónicos han aumentado.
+                </p>
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-[#FF6B6B]">
+                        <h4 class="font-bold text-gray-800">Tarjetas de Crédito</h4>
+                        <p class="text-sm text-gray-600">Representan la mayor fuente de comisiones netas (anualidades, cargos por mora, disposición de efectivo).</p>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-[#FF9F43]">
+                        <h4 class="font-bold text-gray-800">Manejo de Cuenta</h4>
+                        <p class="text-sm text-gray-600">Cobros por no mantener saldo promedio mínimo o por servicios de banca electrónica empresarial.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Top Players (Bubble Chart) -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Los Gigantes del Sector</h3>
+            <p class="text-gray-600 mb-6">
+                Comparativa de los principales bancos (G7) en términos de Activos totales vs. Ingresos Totales. El tamaño de la burbuja representa la <strong>Utilidad Neta</strong>. Se observa una alta concentración de mercado.
+            </p>
+            <div class="chart-container" style="max-width: 100%; height: 450px;">
+                <canvas id="bubbleChart"></canvas>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-4 justify-center text-sm text-gray-500">
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[#6C63FF] mr-2"></span>BBVA</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[#00D2D3] mr-2"></span>Santander</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[#FF6B6B] mr-2"></span>Banorte</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-[#FF9F43] mr-2"></span>Citibanamex</div>
+            </div>
         </section>
 
         <!-- Footer -->
-        <footer class="text-center py-10 text-gray-600">
-            © 2025 – Portafolio de José | Visualización Financiera
+        <footer class="text-center text-gray-500 py-8 border-t border-gray-200 mt-8">
+            <p class="text-sm">Infografía generada para análisis del sector bancario mexicano.</p>
+            <p class="text-xs mt-1">Datos ilustrativos basados en tendencias históricas de la CNBV y Banxico.</p>
         </footer>
 
     </main>
 
     <script>
-        // ============================================
-        // 1. Barra horizontal – Activos por banco
-        // ============================================
-        new Chart(document.getElementById("topBanksChart"), {
-            type: "bar",
+        // --- UTILITY FUNCTIONS ---
+
+        // 16-character label wrapper (Mandatory Requirement)
+        function formatLabel(str, maxwidth = 16) {
+            if (typeof str !== 'string' || str.length <= maxwidth) return str;
+            
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxwidth) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Process array of labels
+        function processLabels(labels) {
+            return labels.map(label => formatLabel(label));
+        }
+
+        // Mandatory Tooltip Callback
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // Common Chart Options
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { font: { family: 'Inter', size: 12 } }
+                },
+                tooltip: tooltipConfig
+            }
+        };
+
+        // --- CHART 1: INCOME MIX (DOUGHNUT) ---
+        const ctxMix = document.getElementById('incomeMixChart').getContext('2d');
+        const rawLabelsMix = ['Margen Financiero (Intereses)', 'Comisiones y Tarifas Netas', 'Intermediación y Otros'];
+        
+        new Chart(ctxMix, {
+            type: 'doughnut',
             data: {
-                labels: [
-                    "BBVA", "Santander", "Banorte", 
-                    "Citibanamex", "HSBC", "Scotiabank", "Inbursa"
-                ],
+                labels: processLabels(rawLabelsMix),
                 datasets: [{
-                    label: "Activos (miles de millones de pesos)",
-                    data: [3200, 1700, 1600, 1400, 900, 700, 600],
-                    backgroundColor: "#1d4ed8"
+                    data: [68, 19, 13],
+                    backgroundColor: ['#6C63FF', '#00D2D3', '#FF9F43'],
+                    borderWidth: 0,
+                    hoverOffset: 4
                 }]
             },
             options: {
-                indexAxis: "y",
-                responsive: true,
+                ...commonOptions,
+                cutout: '60%',
                 plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: "Activos Totales por Banco – 2024",
-                        font: { size: 16 }
-                    }
+                    ...commonOptions.plugins,
+                    legend: { position: 'bottom' }
                 }
             }
         });
 
-        // ============================================
-        // 2. Línea – Evolución del crédito total
-        // ============================================
-        new Chart(document.getElementById("trendChart"), {
-            type: "line",
+        // --- CHART 2: TREND LINE (INTEREST VS RATE) ---
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        const labelsTrend = ['2019', '2020', '2021', '2022', '2023', '2024 (Est)'];
+
+        new Chart(ctxTrend, {
+            type: 'line',
             data: {
-                labels: ["2018", "2019", "2020", "2021", "2022", "2023", "2024"],
-                datasets: [{
-                    label: "Crédito total (billones de pesos)",
-                    data: [5.1, 5.3, 5.0, 5.4, 5.8, 6.3, 6.9],
-                    borderWidth: 3,
-                    tension: 0.3,
-                    fill: false,
-                    borderColor: "#2563eb",
-                }]
+                labels: labelsTrend,
+                datasets: [
+                    {
+                        label: 'Ingresos por Intereses (Miles de MDP)',
+                        data: [750, 710, 780, 950, 1150, 1300], // Simulated Data following trend
+                        borderColor: '#6C63FF',
+                        backgroundColor: 'rgba(108, 99, 255, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Tasa Referencia Banxico (%)',
+                        data: [7.25, 4.25, 5.50, 10.50, 11.25, 10.50],
+                        borderColor: '#FF6B6B',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        pointStyle: 'rectRot',
+                        pointRadius: 6,
+                        yAxisID: 'y1'
+                    }
+                ]
             },
             options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: "Crecimiento del Crédito Bancario",
-                        font: { size: 16 }
-                    }
+                ...commonOptions,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
                 },
                 scales: {
-                    y: { beginAtZero: false }
-                }
-            }
-        });
-
-        // ============================================
-        // 3. Pie – Participación de mercado
-        // ============================================
-        new Chart(document.getElementById("marketPieChart"), {
-            type: "pie",
-            data: {
-                labels: [
-                    "BBVA (36%)", "Santander (14%)", "Banorte (13%)",
-                    "Citibanamex (9%)", "HSBC (5%)", "Otros (23%)"
-                ],
-                datasets: [{
-                    data: [36, 14, 13, 9, 5, 23],
-                    backgroundColor: [
-                        "#1d4ed8",
-                        "#3b82f6",
-                        "#60a5fa",
-                        "#93c5fd",
-                        "#bfdbfe",
-                        "#d1d5db"
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
+                    y: {
+                        type: 'linear',
                         display: true,
-                        text: "Participación del Mercado Bancario – 2024",
-                        font: { size: 16 }
+                        position: 'left',
+                        title: { display: true, text: 'Ingresos (Miles de Millones)' },
+                        grid: { color: '#E5E7EB' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Tasa (%)' },
+                        grid: { drawOnChartArea: false }
                     }
                 }
             }
         });
-    </script>
 
+        // --- CHART 3: COMMISSIONS (HORIZONTAL BAR) ---
+        const ctxComm = document.getElementById('commissionsChart').getContext('2d');
+        const rawLabelsComm = [
+            'Tarjetas de Crédito y Débito',
+            'Manejo de Cuenta y Transferencias',
+            'Créditos Otorgados',
+            'Seguros y Fianzas',
+            'Servicios Fiduciarios'
+        ];
+
+        new Chart(ctxComm, {
+            type: 'bar',
+            data: {
+                labels: processLabels(rawLabelsComm),
+                datasets: [{
+                    label: '% del Total de Comisiones',
+                    data: [42, 28, 15, 10, 5],
+                    backgroundColor: [
+                        '#6C63FF', // Purple
+                        '#8075FF', 
+                        '#00D2D3', // Teal
+                        '#48E5E6',
+                        '#FF9F43'  // Orange
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: function(value) { return value + "%" } }
+                    },
+                    y: { grid: { display: false } }
+                },
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // --- CHART 4: MARKET PLAYERS (BUBBLE) ---
+        // X = Assets (Billions), Y = Revenue (Billions), R = Profit (Scaled)
+        const ctxBubble = document.getElementById('bubbleChart').getContext('2d');
+        
+        new Chart(ctxBubble, {
+            type: 'bubble',
+            data: {
+                datasets: [
+                    {
+                        label: 'BBVA México',
+                        data: [{x: 2800, y: 320, r: 35}],
+                        backgroundColor: '#6C63FF'
+                    },
+                    {
+                        label: 'Santander',
+                        data: [{x: 1900, y: 180, r: 20}],
+                        backgroundColor: '#00D2D3'
+                    },
+                    {
+                        label: 'Banorte',
+                        data: [{x: 1600, y: 195, r: 24}],
+                        backgroundColor: '#FF6B6B'
+                    },
+                    {
+                        label: 'Citibanamex',
+                        data: [{x: 1400, y: 160, r: 15}],
+                        backgroundColor: '#FF9F43'
+                    },
+                    {
+                        label: 'HSBC',
+                        data: [{x: 800, y: 90, r: 10}],
+                        backgroundColor: '#9CA3AF'
+                    },
+                    {
+                        label: 'Scotiabank',
+                        data: [{x: 750, y: 70, r: 8}],
+                        backgroundColor: '#9CA3AF'
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Activos Totales (Miles de Mdp)' },
+                        grid: { color: '#E5E7EB' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Ingresos Totales (Miles de Mdp)' },
+                        grid: { color: '#E5E7EB' }
+                    }
+                },
+                plugins: {
+                    ...commonOptions.plugins,
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].dataset.label;
+                            },
+                            label: function(context) {
+                                return `Activos: ${context.raw.x}, Ingresos: ${context.raw.y}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
 </body>
 </html>
